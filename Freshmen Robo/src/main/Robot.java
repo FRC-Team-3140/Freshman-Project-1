@@ -5,15 +5,17 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package org.usfirst.frc.team3140.robot;
+package main;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc.team3140.robot.commands.SpinOut;
-import org.usfirst.frc.team3140.robot.subsystems.Intake;
+import main.commands.intake.SpinOut;
+import main.subsystems.Drivetrain;
+import main.subsystems.Intake;
+import main.subsystems.Pneumatics;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -24,6 +26,8 @@ import org.usfirst.frc.team3140.robot.subsystems.Intake;
  */
 public class Robot extends TimedRobot implements HardwareAdapter, Constants {
 	public static Intake in;
+	public static Drivetrain dt;
+	public static Pneumatics pn;
 	public static OI oi;
 
 
@@ -34,6 +38,8 @@ public class Robot extends TimedRobot implements HardwareAdapter, Constants {
 	@Override
 	public void robotInit() {
 		in = new Intake();
+		dt = new Drivetrain();
+		pn = new Pneumatics();
 		// oi must come last
 		oi = new OI();
 	}

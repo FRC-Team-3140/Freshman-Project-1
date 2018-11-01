@@ -5,13 +5,17 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package org.usfirst.frc.team3140.robot.subsystems;
+package main.subsystems;
 
-import org.usfirst.frc.team3140.robot.Constants;
-import org.usfirst.frc.team3140.robot.HardwareAdapter;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import main.Constants;
+import main.HardwareAdapter;
+import util.DriveHelper;
 
 public class Intake extends Subsystem implements Constants, HardwareAdapter {
+	private DriveHelper driveHelper = new DriveHelper(7.5);
+	
+	double intakeDeadband = 0.1;
 	
 	public void spinIn() {
 		leftIntakeMotor.set(1.0);
@@ -33,5 +37,10 @@ public class Intake extends Subsystem implements Constants, HardwareAdapter {
 		// setDefaultCommand(new MySpecialCommand());
 		setDefaultCommand(null);
 
+	}
+	
+	public void moveWithJoystick(double throttle) {
+		leftIntakeMotor.set(driveHelper.handleOverPower(driveHelper.handleDeadband(throttle, intakeDeadband)));
+		rightIntakeMotor.set(-driveHelper.handleOverPower(driveHelper.handleDeadband(throttle, intakeDeadband)));
 	}
 }
