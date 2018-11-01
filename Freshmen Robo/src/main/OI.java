@@ -38,11 +38,13 @@ public class OI implements HardwareAdapter, Constants {
 		xbox.b.whenPressed(new TimedTurn(TurnMode.Left, TIMED_TURN_THROTTLE, 2));
 		xbox.x.whenPressed(new TimedTurn(TurnMode.Left, TIMED_TURN_THROTTLE, 3));
 
-		
+		xbox.y.whenPressed(new TimedTurn(TurnMode.Right, TIMED_TURN_THROTTLE, 2.5));
+
 	}
 	
 	public void check() {
 		xbox.check();
+		xbox2.check();
 	}
 	
 	public static XboxController getXbox() {
