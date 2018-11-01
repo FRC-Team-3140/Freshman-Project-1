@@ -7,6 +7,12 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 public interface Constants {
+	
+	public final double DT_IN_PER_SEC = 1; //TODO this
+	public final double TIMED_DRIVE_THROTTLE = 0.9;
+	public final double TIMED_TURN_THROTTLE = 0.75;
+	public final double TIME_90_DEG = 1;
+	
 	/*************
 	 * CONSTANTS *
 	 *************/
@@ -26,7 +32,6 @@ public interface Constants {
 	/*********
 	 * PORTS *
 	 *********/	
-	
 	public final int XBOX_PORT = 0;
 	public static int Xbox2_Port = 1;
 

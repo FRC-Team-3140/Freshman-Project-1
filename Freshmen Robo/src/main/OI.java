@@ -7,6 +7,8 @@
 
 package main;
 import lib.joystick.XboxController;
+import main.commands.drivetrain.TimedDrive;
+import main.commands.drivetrain.TimedTurn;
 import main.commands.intake.SpinIn;
 import main.commands.intake.SpinOff;
 import main.commands.intake.SpinOut;
@@ -31,6 +33,11 @@ public class OI implements HardwareAdapter, Constants {
 
 		xbox2.leftBumper.whenPressed(new SwitchTilt(new TiltDown(), new TiltUp()));
 		xbox2.rightBumper.whenPressed(new SwitchArm(new ArmOpen(), new ArmClose()));
+		
+		xbox.a.whenPressed(new TimedDrive(TIMED_DRIVE_THROTTLE, 2));
+		xbox.b.whenPressed(new TimedTurn(TurnMode.Left, TIMED_TURN_THROTTLE, 2));
+		xbox.x.whenPressed(new TimedTurn(TurnMode.Left, TIMED_TURN_THROTTLE, 3));
+
 		
 	}
 	

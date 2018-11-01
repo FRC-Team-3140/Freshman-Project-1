@@ -7,11 +7,18 @@
 
 package main;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import main.commands.autos.Baseline;
+import main.commands.autos.CenterToLeftSwitch;
+import main.commands.autos.CenterToRightSwitch;
+import main.commands.autos.DoNothing;
+import main.commands.autos.LeftToLeftSwitch;
+import main.commands.autos.RightToRightSwitch;
 import main.commands.intake.SpinOut;
 import main.subsystems.Drivetrain;
 import main.subsystems.Intake;
@@ -29,6 +36,17 @@ public class Robot extends TimedRobot implements HardwareAdapter, Constants {
 	public static Drivetrain dt;
 	public static Pneumatics pn;
 	public static OI oi;
+	
+	// AUTO LOGIC
+	private enum StartPos {LEFT, CENTER, RIGHT}
+	private enum RobotAction {DO_NOTHING, BASELINE, SWITCH}
+	//private enum RobotAction{DO_Nothing, EDGECASE_DoNothing, EDGECASE_Baseline, EDGECASE_SwitchFromBehind}
+	public static StartPos start_pos;
+	public static RobotAction robot_act;
+	private static SendableChooser<RobotAction> autoChooser;
+	private static SendableChooser<StartPos> startPos;
+	private static Command autoCommand;
+	
 
 
 	/**
@@ -42,6 +60,19 @@ public class Robot extends TimedRobot implements HardwareAdapter, Constants {
 		pn = new Pneumatics();
 		// oi must come last
 		oi = new OI();
+		
+		// Auto modes
+		autoChooser = new SendableChooser<>();
+		autoChooser.addDefault("Do Nothing", RobotAction.DO_NOTHING);
+		autoChooser.addObject("Baseline", RobotAction.BASELINE);
+		autoChooser.addObject("Switch Priority", RobotAction.SWITCH);
+		// Starting Pos
+		startPos = new SendableChooser<>();
+		startPos.addDefault("Left", StartPos.LEFT);
+		startPos.addObject("Center", StartPos.CENTER);
+		startPos.addObject("Right", StartPos.RIGHT);
+		SmartDashboard.putData("Starting Position", startPos);
+		SmartDashboard.putData("Auto Mode", autoChooser);
 	}
 
 	/**
@@ -59,19 +90,53 @@ public class Robot extends TimedRobot implements HardwareAdapter, Constants {
 		Scheduler.getInstance().run();
 	}
 
-	/**
-	 * This autonomous (along with the chooser code above) shows how to select
-	 * between different autonomous modes using the dashboard. The sendable
-	 * chooser code works with the Java SmartDashboard. If you prefer the
-	 * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-	 * getString code to get the auto name from the text box below the Gyro
-	 *
-	 * <p>You can add additional auto modes by adding additional commands to the
-	 * chooser code above (like the commented example) or additional comparisons
-	 * to the switch structure below with additional strings & commands.
-	 */
 	@Override
 	public void autonomousInit() {
+		String gmsg = DriverStation.getInstance().getGameSpecificMessage();
+		while (gmsg == null || gmsg.length() != 3) {
+			gmsg = DriverStation.getInstance().getGameSpecificMessage();
+			try {
+				Thread.sleep(5);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		System.out.println("message" + gmsg);
+		System.out.println("auto" + autoChooser.getSelected());
+		System.out.println("pos" + startPos.getSelected());
+
+		boolean leftSwitch = gmsg.charAt(0) == 'L';
+			
+		start_pos = startPos.getSelected();
+		robot_act = autoChooser.getSelected();
+		
+		if(robot_act == RobotAction.DO_NOTHING)//Do Nothing
+			autoCommand = new DoNothing();
+		
+		else if(robot_act == RobotAction.BASELINE)//Baseline
+			autoCommand = new Baseline();
+		
+		else if(robot_act == RobotAction.SWITCH) {//Priority Switch
+			if(start_pos == StartPos.LEFT) {
+				if(leftSwitch) {
+					autoCommand = new LeftToLeftSwitch();
+				}
+				else autoCommand = new Baseline();					
+			}
+			else if(start_pos == StartPos.CENTER) {
+				if(leftSwitch) autoCommand = new CenterToLeftSwitch();
+				else autoCommand = new CenterToRightSwitch();
+			}
+			else if(start_pos == StartPos.RIGHT) {
+				if(!leftSwitch) {
+					autoCommand = new RightToRightSwitch();
+				}
+				else autoCommand = new Baseline();					
+			}
+		}
+		
+		if(autoCommand != null) autoCommand.start();
 
 	}
 
