@@ -8,10 +8,10 @@ public class Pneumatics extends ImprovedSubsystem {
 	public Pneumatics() {
 		shifter.set(EXT);
 		shifter.set(OFF);
-		tilter.set(EXT);
-		tilter.set(OFF);
-		intakeArm.set(EXT);
-		intakeArm.set(OFF);
+//		tilter.set(EXT);
+//		tilter.set(OFF);
+//		intakeArm.set(EXT);
+//		intakeArm.set(OFF);
 	}
 	
 	public static enum ArmStates {
@@ -49,14 +49,14 @@ public class Pneumatics extends ImprovedSubsystem {
 	public void toggleArm(DoubleSolenoid.Value v) {
 		if (v == EXT) armClose = true;
 		else if (v == RET) armClose = false;
-		intakeArm.set(v);
+//		intakeArm.set(v);
 	}
 		
 	// Changes the tilter to up or down
 	public void tilt(DoubleSolenoid.Value v) {
 		if (v == EXT) tiltUp = true;
 		else if (v == RET) tiltUp = false;
-		tilter.set(v);
+//		tilter.set(v);
 	}
 	
 	public boolean isArmClose() {
