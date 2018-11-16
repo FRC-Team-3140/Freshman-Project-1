@@ -6,9 +6,11 @@
 /*----------------------------------------------------------------------------*/
 
 package org.usfirst.frc.team3140.robot;
+import org.usfirst.frc.team3140.robot.commands.MoveUp;
 import org.usfirst.frc.team3140.robot.commands.SpinIn;
 import org.usfirst.frc.team3140.robot.commands.SpinOff;
 import org.usfirst.frc.team3140.robot.commands.SpinOut;
+import org.usfirst.frc.team3140.robot.commands.StopMoving;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -22,6 +24,9 @@ public class OI implements HardwareAdapter, Constants {
 		xbox.a.whileHeld(new SpinIn());
 		xbox.b.whenReleased(new SpinOff());
 		xbox.a.whenReleased(new SpinOff());
+		xbox.a.whenPressed(new MoveUp());
+		xbox.a.whenReleased(new StopMoving());
+
 	}
 	
 	public void check() {

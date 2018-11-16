@@ -6,4 +6,7 @@ public interface Constants {
 	// INTAKE MOTORS	
 	public final int LEFT_Intake = 1;
 	public final int RIGHT_Intake = 0;
+	
+	// ELEVATOR
+	public final int ELEVATOR_1 = 3;
 }

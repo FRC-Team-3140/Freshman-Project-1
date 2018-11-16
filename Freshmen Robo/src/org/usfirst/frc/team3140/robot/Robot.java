@@ -13,7 +13,10 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team3140.robot.commands.SpinOut;
+import org.usfirst.frc.team3140.robot.subsystems.Elevator;
 import org.usfirst.frc.team3140.robot.subsystems.Intake;
+
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -25,15 +28,14 @@ import org.usfirst.frc.team3140.robot.subsystems.Intake;
 public class Robot extends TimedRobot implements HardwareAdapter, Constants {
 	public static Intake in;
 	public static OI oi;
+	//public static Elevator elevator2 = new Elevator ();
+	public static Elevator el;
+	//public static WPI_TalonSRX elevator1 = new WPI_TalonSRX(ELEVATOR_1);
 
-
-	/**
-	 * This function is run when the robot is first started up and should be
-	 * used for any initialization code.
-	 */
 	@Override
 	public void robotInit() {
 		in = new Intake();
+		el = new Elevator();
 		// oi must come last
 		oi = new OI();
 	}
