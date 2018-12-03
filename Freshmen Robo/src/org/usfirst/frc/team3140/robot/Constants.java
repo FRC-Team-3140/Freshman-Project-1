@@ -8,5 +8,6 @@ public interface Constants {
 	public final int RIGHT_Intake = 0;
 	
 	// ELEVATOR
-	public final int ELEVATOR_1 = 3;
+	public final int ELEVATOR_1 = 8;
+	public final int ELEVATOR_2 = 7;
 }
